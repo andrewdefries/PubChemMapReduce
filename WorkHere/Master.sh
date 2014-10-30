@@ -7,8 +7,6 @@ for t in "${filecontent[@]}"
 do
 ####
 
-while
-
 gsutil -m cp $t .
 gsutil -m cp $[$t+1] .
 gsutil -m cp $[$t+2] .
@@ -33,13 +31,18 @@ filecontent=$[$t + 17]
 ###
 echo "#################################"
 echo "#################################"
-echo "Doing some Chemmining of $t"
+echo "Doing some Chemmining of $t to $[$t+16]"
 echo "#################################"
 echo "#################################"
 
 #R CMD BATCH DrugBank/PrepareDrugBank.R
 R CMD BATCH OpenSDFset
 R CMD BATCH MergeNCluster.R
+
+echo "#################################"
+echo "#################################"
+echo "Doing some copying of $t to $[$t+16]"
+echo "#################################"
 
 gsutil -m cp group*.rda gs://pmc_reduce2drugbank/
 
