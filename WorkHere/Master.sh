@@ -1,5 +1,5 @@
 
-gsutil -m ls gs://swapmeet/*.sdf > Worklist
+gsutil -m ls gs://pubchem/*.sdf > Worklist
 ############################
 filecontent=(`cat WorkList_*`)
 for t in "${filecontent[@]}"
