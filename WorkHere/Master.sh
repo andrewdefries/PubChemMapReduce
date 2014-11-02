@@ -1,6 +1,11 @@
 ncores=(`nproc`)
 
+rm group*.rda
+rm Compound*
+
 rm Compound*.sdf
+rm RunLog
+rm *.Rout
 
 gsutil -m ls  gs://pubchem/*.sdf > WorkList
 worklist=(`cat WorkList`)
@@ -11,7 +16,7 @@ do
 for (( i=0 ; i<$ncores ; i+$ncores))
 do
 #echo "gsutil -m cp ${worklist[$i+$m]} ."
-gsutil -m cp ${worklist[$i]} .
+gsutil -m cp ${worklist[$i+m]} .
 let i++
 done
 echo "Run OpenSDF.R script"
@@ -25,6 +30,8 @@ gsutil -m cp Compound*.rda gs://pmc_rda
 
 rm group*.rda
 rm Compound*
+
+cat *.Rout >> RunLog
 
 echo "Moving on"
 
