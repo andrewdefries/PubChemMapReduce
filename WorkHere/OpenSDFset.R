@@ -25,7 +25,7 @@ save(apset,file=gsub(".sdf", "_apset.rda", files[a]), compress=T)
 ##################
 }
 a<-1:length(files)
-mclapply(a,SplitSDFset, mc.cores=ncores)
+mclapply(a,SplitSDFset, mc.cores=16)
 ##################
 
 

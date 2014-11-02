@@ -4,8 +4,7 @@ library(ChemmineR)
 library(parallel)
 ###################
 ncores<-system("nproc")
-sdfset_files<-list.files(pattern="Compound*")
-apset_files<-list.files(pattern="Compound*")
+apset_files<-list.files(pattern="*_apset.rda", recursive=F)
 #######################
 MergeWork<-function(b){
 #######################
@@ -16,7 +15,7 @@ load("DrugBank_approved_apset.rda")
 apset_b<-apset
 rm(apset)
 ##
-splitVal<-500
+splitVal<-1000
 apset_increment<-seq(1,length(apset_a),splitVal)
 ##
 for (i in apset_increment){
@@ -36,5 +35,5 @@ save(cluster, file=paste("group_", i, "_", gsub("_apset.rda", "_cluster_w_approv
 ##########################
 }
 b<-1:length(sdfset_files)
-mclapply(b, MergeWork, mc.cores=ncores)
+mclapply(b, MergeWork, mc.cores=16)
 
