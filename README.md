@@ -9,6 +9,49 @@ Since the PubChem data set is so large it is not amenable to standard clustering
 
 ![Workflow Overview](https://github.com/andrewdefries/PubChemMapReduce/blob/master/PubChemMapReduce.png "Workflow Overview")
 
+Master.sh
+```
+# get worklist by listing contents of storage bucket for PubChem SDFs
+gsutil -m ls  gs://pubchem/*.sdf > WorkList
+
+# load WorkList to variable 
+worklist=(`cat WorkList`)
+
+# set number of cores from system
+ncores=(`nproc`)
+
+# iterate through the worklist in increments determined by the number of cores and worklist length
+for m in $(seq 0 $ncores ${#worklist[@]})
+do
+
+# setup inner loop to copy multiple files to local for each core   
+for (( i=0 ; i<$ncores ; i+$ncores))
+do
+
+gsutil -m cp ${worklist[$i+m]} .
+
+let i++
+
+done
+
+# make rda files from SDF
+./OpenSDFset.R 
+
+# split to chunks by splitval and cluster with DrugBank, trim dissimilar
+./MergeNCluster.R 
+
+# copy generated files to buckets
+gsutil -m cp group*.rda gs://pmc_reduce2drugbank/
+gsutil -m cp Compound*.rda gs://pmc_rda
+
+done
+
+# merge compounds to proper chemical clade by combining lists and clustering once more
+./Combine.R
+
+```
+
+
 This procedure has the following advantages:
 
 1. The clustering procedure is no longer intractable by chunking the PubChem data into n segments

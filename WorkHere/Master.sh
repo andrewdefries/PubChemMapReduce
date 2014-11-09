@@ -25,7 +25,7 @@ echo "Run MergeNCluster.R script"
 ./MergeNCluster.R 
 echo "increment $m"
 
-gsutil -m cp group*.rda gs://pmc_reduce2drugbank/
+gsutil -m cp group_*.rda gs://pmc_reduce2drugbank/
 gsutil -m cp Compound*.rda gs://pmc_rda
 
 rm group*.rda
