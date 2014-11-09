@@ -7,6 +7,8 @@ Here a few scripts were written to break up the processing of PubChem into a map
 
 Since the PubChem data set is so large it is not amenable to standard clustering techniques. Often, the purpose of clustering is to determine nearest neighbors of compounds of interest. Therefore, in the map stage compounds were identified in PubChem with a distinct similarity cutoff to a query data set (here DrugBank). This process, at present, requires an iterative procedure of chunking the PubChem data set into n compounds (500 or 1000), pooling these with the DrugBank compounds, followed by an all-against-all clustering. 
 
+![Workflow Overview](https://github.com/andrewdefries/PubChemMapReduce/blob/master/PubChemMapReduce.png "Workflow Overview")
+
 This procedure has the following advantages:
 
 1. The clustering procedure is no longer intractable by chunking the PubChem data into n segments
