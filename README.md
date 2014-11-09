@@ -51,6 +51,35 @@ done
 
 ```
 
+Splitting of the PubChem files was achived by incrementing through the apset by a split value of 1000.
+
+MergeNCluster.R
+```
+splitVal<-1000
+
+# use seq to create a vector with the proper increments
+apset_increment<-seq(1,length(apset_a),splitVal)
+
+# loop through the elements of the increment
+for (i in apset_increment){
+
+# deal with only the subset of the apset one increment at a time, and merge with the DrugBank apset (apset_b)
+apset<-c(apset_a[i:i+1], apset_b)
+
+# cluster
+cluster<-cmp.cluster(apset, cutoff=c(0.7))
+
+# if a PubChem compound is found by ID in any of the resulting 70% similarity clusters, then save the clusters as list
+if (match(cluster$ids,cid(apset))==1){
+
+save(cluster, file=paste("group_", i, "_", gsub("_apset.rda", "_cluster_w_approved.rda", apset_files[b]), sep=""), compress=T)
+
+}else{}
+
+#close for loop
+}
+
+```
 
 This procedure has the following advantages:
 
